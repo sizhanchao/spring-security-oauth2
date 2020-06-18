@@ -1,0 +1,70 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true    #当遇到同样名字的时候，是否允许覆盖注册
+  application:
+    name: oauth2-server
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/oauth2?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    hikari:
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 10
+      auto-commit: true
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  security:
+    oauth2:
+      client:
+        provider: sizhanchao
+        registration: client2
+      resourceserver:
+        jwt:
+          jws-algorithm: RS256              #用于验证数字签名的JSON Web算法。
+          #public-key-location:              #包含用于验证JWT的公钥的文件的位置。
+          jwk-set-uri:
+#        opaquetoken:
+#          client-id: aaaa             #用于通过令牌自省端点进行身份验证的客户端ID。
+#          client-secret: 123456         #用于通过令牌自省端点进行身份验证的客户端机密
+#
+#      name:
+#      password:
+#      roles:
+
+
+server:
+  port: 8080
+
+
+#mybatis:
+#  type-aliases-package: com.funtl.oauth2.server.domain
+#  mapper-locations: classpath:mapper/*.xml
+
+
+# mybatis-plus 配置内容
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
+  global-config:
+    db-config:
+      id-type: auto # ID 主键自增
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.funtl.oauth2.server.domain
+
+# logging
+logging:
+  level:
+    # dao 开启 debug 模式 mybatis 输入 sql
+    com:
+      funtl:
+        oauth2:
+              mapper: debug
+
